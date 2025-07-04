@@ -69,7 +69,7 @@ Click/drag on the canvas to paint live cells with the selected color.
 
 Click ▶ Start / ⏸ Pause to begin or stop the simulation.
 
-Click ⇆ Forward to toggle between forward and reverse playback.
+Use the direction slider to switch between forward and reverse playback.
 
 Adjust zoom, color, and speed as needed.
 
