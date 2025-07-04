@@ -15,6 +15,8 @@ export class GameOfLife {
     this.colorMode = colorMode;
     this.neighborType = neighborType;
     this.vibrance = vibrance;
+    this.history = [];
+    this.maxHistory = 200;
     this.hue = Math.random() * 360;
     this.randomize();
   }
@@ -36,6 +38,7 @@ export class GameOfLife {
           : { alive: 0, color: null, ghost: 0, ghostColor: null, ghostFade: 0 }
       )
     );
+    this.history = [];
   }
 
   clear() {
@@ -44,6 +47,7 @@ export class GameOfLife {
         ({ alive: 0, color: null, ghost: 0, ghostColor: null, ghostFade: 0 })
       )
     );
+    this.history = [];
   }
 
   getCell(row, col) {
@@ -62,6 +66,9 @@ export class GameOfLife {
   }
 
   step() {
+    const snapshot = this.grid.map(row => row.map(cell => ({ ...cell }))); 
+    this.history.push(snapshot);
+    if (this.history.length > this.maxHistory) this.history.shift();
     const newGrid = Array.from({ length: this.rows }, () => Array(this.cols));
     for (let r = 0; r < this.rows; r++) {
       for (let c = 0; c < this.cols; c++) {
@@ -127,6 +134,11 @@ export class GameOfLife {
       }
     }
     this.grid = newGrid;
+  }
+
+  stepBackward() {
+    if (this.history.length === 0) return;
+    this.grid = this.history.pop();
   }
 
   _neighbors(row, col) {
@@ -221,5 +233,6 @@ export class GameOfLife {
     this.rows = newRows;
     this.cols = newCols;
     this.grid = newGrid;
+    this.history = [];
   }
 }
