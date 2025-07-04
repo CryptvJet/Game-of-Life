@@ -199,7 +199,7 @@ zoomInBtn.onclick = function() {
   resizeCanvasAndGrid(true);
 };
 zoomOutBtn.onclick = function() {
-  cellSize = Math.max(cellSize - 2, 5);
+  cellSize = Math.max(cellSize - 2, 1);
   resizeCanvasAndGrid(true);
 };
 colorPicker.oninput = e => { aliveColor = e.target.value; };
