@@ -127,7 +127,6 @@ body {
   display: flex;
   align-items: center;
   gap: 0.4em;
-  margin-left: 1em;
 }
 input[type="range"] {
   width: 90px;
@@ -164,7 +163,7 @@ label {
   #panel { flex-direction: column; gap: 0.4em; margin-right: 0; }
   #patterns-panel { margin-right: 0; }
   #speed-controls { margin-left: 0; margin-top: 0.5em; }
-  #direction-controls { margin-left: 0; margin-top: 0.5em; }
+  #direction-controls { margin-top: 0.5em; }
 }
 
 /* Pattern Modal Styles */
