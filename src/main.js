@@ -32,8 +32,8 @@ let running = false;
 let aliveColor = colorPicker.value;
 
 // Simulation settings (defaults)
-let bornAt = [2];
-let surviveCount = [2];
+let bornAt = [3];
+let surviveCount = [2, 3];
 let fps = parseInt(speedSlider.value);
 let ghostFadeBase = parseInt(ghostFadeSlider.value) / 100;
 let colorMode = colorModeSelect.value;
