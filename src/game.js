@@ -38,16 +38,30 @@ export class GameOfLife {
     let startCol = Math.floor((this.cols - rCols) / 2);
     startRow = Math.max(0, startRow);
     startCol = Math.max(0, startCol);
+
+    const palette = this._generatePalette(5);
+
     for (let r = 0; r < rRows && startRow + r < this.rows; r++) {
       for (let c = 0; c < rCols && startCol + c < this.cols; c++) {
         if (Math.random() > 0.5) {
           const row = startRow + r;
           const col = startCol + c;
-          this.grid[row][col] = { alive: 1, color: this._randomColor(), ghost: 0, ghostColor: null, ghostFade: 0 };
+          const color = palette[Math.floor(Math.random() * palette.length)];
+          this.grid[row][col] = { alive: 1, color, ghost: 0, ghostColor: null, ghostFade: 0 };
         }
       }
     }
     this.history = [];
+  }
+
+  _generatePalette(count = 5) {
+    const baseHue = Math.floor(Math.random() * 360);
+    const palette = [];
+    for (let i = 0; i < count; i++) {
+      const hue = (baseHue + i * 15 + Math.random() * 10) % 360;
+      palette.push(`hsl(${hue},${this.vibrance}%,60%)`);
+    }
+    return palette;
   }
 
   clear() {
