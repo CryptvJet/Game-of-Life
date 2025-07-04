@@ -19,9 +19,9 @@ let cellSize = 13;
 let rows, cols, game;
 let running = false;
 let aliveColor = colorPicker.value;
-let bornAt = parseInt(bornSlider.value);
-let surviveCount = parseInt(surviveSlider.value);
-let fps = parseInt(speedSlider.value);
+let bornAt = parseInt(bornSlider.value); // defaults to 2
+let surviveCount = parseInt(surviveSlider.value); // defaults to 2
+let fps = parseInt(speedSlider.value); // defaults to 5
 let animationId = null;
 let lastFrame = 0;
 let frameInterval = 1000 / fps;
