@@ -1,9 +1,26 @@
 export class GameOfLife {
-  constructor(rows, cols) {
+  constructor(rows, cols, bornAt = 3, surviveCount = 2) {
     this.rows = rows;
     this.cols = cols;
-    this.grid = Array.from({ length: rows }, () =>
-      Array.from({ length: cols }, () => Math.random() > 0.8 ? 1 : 0)
+    this.bornAt = bornAt;
+    this.surviveCount = surviveCount;
+    this.randomize();
+  }
+
+  setRules(bornAt, surviveCount) {
+    this.bornAt = bornAt;
+    this.surviveCount = surviveCount;
+  }
+
+  randomize() {
+    this.grid = Array.from({ length: this.rows }, () =>
+      Array.from({ length: this.cols }, () => Math.random() > 0.7 ? 1 : 0)
+    );
+  }
+
+  clear() {
+    this.grid = Array.from({ length: this.rows }, () =>
+      Array.from({ length: this.cols }, () => 0)
     );
   }
 
@@ -24,9 +41,9 @@ export class GameOfLife {
           return acc + (this.grid[nr]?.[nc] || 0);
         }, 0);
         if (this.grid[r][c]) {
-          newGrid[r][c] = (neighbors === 2 || neighbors === 3) ? 1 : 0;
+          newGrid[r][c] = (neighbors === this.surviveCount) ? 1 : 0;
         } else {
-          newGrid[r][c] = neighbors === 3 ? 1 : 0;
+          newGrid[r][c] = (neighbors === this.bornAt) ? 1 : 0;
         }
       }
     }

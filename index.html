@@ -7,7 +7,32 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <canvas id="game-canvas"></canvas>
+  <div id="container">
+    <canvas id="game-canvas"></canvas>
+    <div id="controls">
+      <button id="start-pause">▶ Start / ⏸ Pause</button>
+      <button id="clear">🧹 Clear</button>
+      <button id="reset">🔄 Reset</button>
+      <button id="zoom-in">➕ Zoom In</button>
+      <button id="zoom-out">➖ Zoom Out</button>
+    </div>
+    <div id="color-controls">
+      <label for="color-picker">🦠 Color: </label>
+      <input type="color" id="color-picker" value="#ff00cc">
+    </div>
+    <div id="sliders">
+      <div>
+        <label for="born-slider">Cells Born At:</label>
+        <input type="range" id="born-slider" min="1" max="8" value="3">
+        <span id="born-value">3</span>
+      </div>
+      <div>
+        <label for="survive-slider">Survival Count:</label>
+        <input type="range" id="survive-slider" min="1" max="8" value="2">
+        <span id="survive-value">2</span>
+      </div>
+    </div>
+  </div>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>
