@@ -176,10 +176,29 @@ export class GameOfLife {
     return `hsl(${h},${this.vibrance}%,60%)`;
   }
   _hexToRgb(hex) {
+    // Support hex, rgb(), and hsl() color formats
+    if (!hex) return [0, 0, 0];
+    if (hex.startsWith("rgb")) {
+      const m = hex.match(/\d+(?:\.\d+)?/g);
+      if (m && m.length >= 3) return [Number(m[0]), Number(m[1]), Number(m[2])];
+      return [0, 0, 0];
+    }
+    if (hex.startsWith("hsl")) {
+      const m = hex.match(/\d+(?:\.\d+)?/g);
+      if (m && m.length >= 3) return this._hslToRgb(Number(m[0]), Number(m[1]), Number(m[2]));
+      return [0, 0, 0];
+    }
     hex = hex.replace(/^#/, "");
     if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
     const int = parseInt(hex, 16);
     return [(int >> 16) & 255, (int >> 8) & 255, int & 255];
+  }
+  _hslToRgb(h, s, l) {
+    s /= 100; l /= 100;
+    const k = n => (n + h / 30) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+    return [Math.round(255 * f(0)), Math.round(255 * f(8)), Math.round(255 * f(4))];
   }
   _rgbToHex(r, g, b) {
     return "#" + [r, g, b].map(x => x.toString(16).padStart(2, "0")).join('');
