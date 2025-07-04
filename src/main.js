@@ -163,7 +163,8 @@ startPauseBtn.onclick = function() {
   }
 };
 function toggleMenu() {
-  bottomControls.classList.toggle('open');
+  const open = bottomControls.classList.toggle('open');
+  menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 menuToggle.addEventListener('click', toggleMenu);
 menuToggle.addEventListener('touchstart', function(e) {
