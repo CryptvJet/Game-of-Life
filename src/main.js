@@ -12,8 +12,6 @@ const zoomOutBtn = document.getElementById('zoom-out');
 const colorPicker = document.getElementById('color-picker');
 const speedSlider = document.getElementById('speed-slider');
 const speedValue = document.getElementById('speed-value');
-const cellSizeSlider = document.getElementById('cellsize-slider');
-const cellSizeValue = document.getElementById('cellsize-value');
 const ghostFadeSlider = document.getElementById('ghostfade-slider');
 const ghostFadeValue = document.getElementById('ghostfade-value');
 const colorModeSelect = document.getElementById('colormode-select');
@@ -25,7 +23,7 @@ const bsSurvive = document.getElementById('bs-survive');
 const showGridCheckbox = document.getElementById('showgrid-checkbox');
 
 // Grid settings
-let cellSize = parseInt(cellSizeSlider.value);
+let cellSize = 13;
 let rows, cols, game;
 let running = false;
 let aliveColor = colorPicker.value;
@@ -150,22 +148,13 @@ clearBtn.onclick = function() { game.clear(); drawGrid(); };
 resetBtn.onclick = function() { game.randomize(); drawGrid(); };
 zoomInBtn.onclick = function() {
   cellSize = Math.min(cellSize + 2, 40);
-  cellSizeSlider.value = cellSize;
-  cellSizeValue.innerText = cellSize;
   resizeCanvasAndGrid(true);
 };
 zoomOutBtn.onclick = function() {
   cellSize = Math.max(cellSize - 2, 5);
-  cellSizeSlider.value = cellSize;
-  cellSizeValue.innerText = cellSize;
   resizeCanvasAndGrid(true);
 };
 colorPicker.oninput = e => { aliveColor = e.target.value; };
-cellSizeSlider.oninput = function(e) {
-  cellSize = parseInt(e.target.value);
-  cellSizeValue.innerText = cellSize;
-  resizeCanvasAndGrid(true);
-};
 ghostFadeSlider.oninput = function(e) {
   ghostFadeBase = parseInt(e.target.value) / 100;
   ghostFadeValue.innerText = ghostFadeBase.toFixed(2);
@@ -221,7 +210,6 @@ canvas.addEventListener('touchend', () => painting = false);
 
 // --- Sliders display ---
 speedValue.innerText = fps;
-cellSizeValue.innerText = cellSize;
 ghostFadeValue.innerText = ghostFadeBase.toFixed(2);
 vibranceValue.innerText = vibrance;
 showGridCheckbox.checked = showGrid;

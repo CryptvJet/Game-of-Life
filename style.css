@@ -126,7 +126,6 @@ body {
 input[type="range"] {
   width: 90px;
 }
-#cellsize-slider { width: 70px; }
 #ghostfade-slider { width: 70px; }
 #vibrance-slider { width: 70px; }
 select {
@@ -140,7 +139,7 @@ label {
   font-size: 1em;
   color: #222;
 }
-#born-value, #survive-value, #speed-value, #cellsize-value, #ghostfade-value, #vibrance-value {
+#born-value, #survive-value, #speed-value, #ghostfade-value, #vibrance-value {
   font-weight: bold;
   margin-left: 0.3em;
   color: #aa0099;
