@@ -30,14 +30,19 @@ export class GameOfLife {
   setNeighborType(val) { this.neighborType = val; }
   setVibrance(val) { this.vibrance = val; }
 
-  randomize() {
-    this.grid = Array.from({ length: this.rows }, () =>
-      Array.from({ length: this.cols }, () =>
-        Math.random() > 0.8
-          ? { alive: 1, color: this._pickColor(), ghost: 0, ghostColor: null, ghostFade: 0 }
-          : { alive: 0, color: null, ghost: 0, ghostColor: null, ghostFade: 0 }
-      )
-    );
+  randomize(rRows = this.rows, rCols = this.cols) {
+    this.clear();
+    const startRow = Math.floor((this.rows - rRows) / 2);
+    const startCol = Math.floor((this.cols - rCols) / 2);
+    for (let r = 0; r < rRows && startRow + r < this.rows; r++) {
+      for (let c = 0; c < rCols && startCol + c < this.cols; c++) {
+        if (Math.random() > 0.5) {
+          const row = startRow + r;
+          const col = startCol + c;
+          this.grid[row][col] = { alive: 1, color: this._randomColor(), ghost: 0, ghostColor: null, ghostFade: 0 };
+        }
+      }
+    }
     this.history = [];
   }
 

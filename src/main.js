@@ -8,7 +8,7 @@ const startPauseBtn = document.getElementById('start-pause');
 const directionSlider = document.getElementById('direction-slider');
 const directionValue = document.getElementById('direction-value');
 const clearBtn = document.getElementById('clear');
-const resetBtn = document.getElementById('reset');
+const randomizeBtn = document.getElementById('randomize');
 const zoomInBtn = document.getElementById('zoom-in');
 const zoomOutBtn = document.getElementById('zoom-out');
 const colorPicker = document.getElementById('color-picker');
@@ -181,8 +181,8 @@ clearBtn.onclick = function() {
   frameSlider.max = frameCount;
   frameSlider.value = frameCount;
 };
-resetBtn.onclick = function() {
-  game.randomize();
+randomizeBtn.onclick = function() {
+  game.randomize(100, 100);
   drawGrid();
   frameCount = 0;
   frameValue.innerText = frameCount;
