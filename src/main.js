@@ -5,7 +5,8 @@ import { patternsList, insertPattern } from './patterns.js';
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 const startPauseBtn = document.getElementById('start-pause');
-const directionToggleBtn = document.getElementById('toggle-direction');
+const directionSlider = document.getElementById('direction-slider');
+const directionValue = document.getElementById('direction-value');
 const clearBtn = document.getElementById('clear');
 const resetBtn = document.getElementById('reset');
 const zoomInBtn = document.getElementById('zoom-in');
@@ -155,9 +156,9 @@ startPauseBtn.onclick = function() {
     animationId = null;
   }
 };
-directionToggleBtn.onclick = function() {
-  forward = !forward;
-  directionToggleBtn.innerText = forward ? '\u21c6 Forward' : '\u21c6 Reverse';
+directionSlider.oninput = function(e) {
+  forward = parseInt(e.target.value) === 1;
+  directionValue.innerText = forward ? 'Forward' : 'Reverse';
 };
 clearBtn.onclick = function() {
   game.clear();
@@ -238,6 +239,8 @@ speedValue.innerText = fps;
 frameValue.innerText = frameCount;
 ghostFadeValue.innerText = ghostFadeBase.toFixed(2);
 vibranceValue.innerText = vibrance;
+directionValue.innerText = forward ? 'Forward' : 'Reverse';
+directionSlider.value = forward ? 1 : 0;
 showGridCheckbox.checked = showGrid;
 canvas.style.background = showGrid ? '#fff' : '#000';
 
