@@ -166,6 +166,77 @@ export const patternsList = {
     [0,"#00aa00","#00aa00","#00aa00",0],
     ["#00aa00",0,"#00aa00",0,"#00aa00"]
   ],
+  "Sunflower": [
+    [0, "#ff0", "#ff0", 0],
+    ["#ff0", "#ffa500", "#ffa500", "#ff0"],
+    ["#ff0", "#ffa500", "#ffa500", "#ff0"],
+    [0, "#ff0", "#ff0", 0]
+  ],
+  "Ice Star": [
+    [0, "#00ffff", 0],
+    ["#00ffff", "#ffffff", "#00ffff"],
+    [0, "#00ffff", 0]
+  ],
+  "Peach Blossom": [
+    [0, "#ffc0cb", 0],
+    ["#ffc0cb", "#ff69b4", "#ffc0cb"],
+    [0, "#ffc0cb", 0]
+  ],
+  "Ocean Wave": [
+    ["#0066cc", "#0099cc", "#00cccc"],
+    ["#0099cc", "#00cccc", "#00ffff"],
+    ["#00cccc", "#00ffff", "#e0ffff"]
+  ],
+  "Lava Core": [
+    [0, "#ff4500", 0],
+    ["#ff6347", "#ff0000", "#ff6347"],
+    [0, "#ff4500", 0]
+  ],
+  "Crystal Bloom": [
+    [0, "#e0ffff", 0],
+    ["#add8e6", "#ffffff", "#add8e6"],
+    [0, "#e0ffff", 0]
+  ],
+  "Galaxy Spiral": [
+    ["#800080", "#4b0082", "#0000ff"],
+    ["#4b0082", "#8a2be2", "#4b0082"],
+    ["#0000ff", "#4b0082", "#800080"]
+  ],
+  "Leaf Cluster": [
+    [0, "#228b22", 0],
+    ["#32cd32", "#00ff00", "#32cd32"],
+    [0, "#228b22", 0]
+  ],
+  "Candy Twist": [
+    ["#ff69b4", "#fff", "#ff69b4"],
+    ["#fff", "#ff69b4", "#fff"],
+    ["#ff69b4", "#fff", "#ff69b4"]
+  ],
+  "Snowflake": [
+    [0, "#add8e6", 0],
+    ["#add8e6", "#ffffff", "#add8e6"],
+    [0, "#add8e6", 0]
+  ],
+  "Flame Burst": [
+    ["#ff4500", "#ff6347", "#ff4500"],
+    ["#ff6347", "#ffd700", "#ff6347"],
+    ["#ff4500", "#ff6347", "#ff4500"]
+  ],
+  "Emerald Gem": [
+    [0, "#00ff7f", 0],
+    ["#00fa9a", "#7fff00", "#00fa9a"],
+    [0, "#00ff7f", 0]
+  ],
+  "Cotton Candy Swirl": [
+    ["#ffb6c1", "#fff", "#add8e6"],
+    ["#fff", "#ffb6c1", "#fff"],
+    ["#add8e6", "#fff", "#ffb6c1"]
+  ],
+  "Neon Cross": [
+    [0, "#39ff14", 0],
+    ["#39ff14", "#ff00ff", "#39ff14"],
+    [0, "#39ff14", 0]
+  ],
   // Guns
   "Gosper Glider Gun": [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
