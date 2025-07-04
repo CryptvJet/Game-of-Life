@@ -187,7 +187,7 @@ clearBtn.onclick = function() {
   frameSlider.value = frameCount;
 };
 randomizeBtn.onclick = function() {
-  game.randomize(100, 100);
+  game.randomize(50, 50);
   drawGrid();
   frameCount = 0;
   frameValue.innerText = frameCount;
