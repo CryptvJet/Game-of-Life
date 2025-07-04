@@ -101,7 +101,7 @@ function drawGrid() {
     }
   }
   if (showGrid) {
-    ctx.strokeStyle = "rgba(0,0,0,0.3)";
+    ctx.strokeStyle = "rgba(200,200,200,0.4)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     for (let x = 0; x <= cols; x++) {
