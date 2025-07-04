@@ -118,7 +118,10 @@ export class GameOfLife {
           }
         }
         if (newCell.ghost && newCell.ghostColor) {
-          newCell.ghostColor = this._hexToRgba(newCell.ghostColor, newCell.ghostFade || 0.13);
+          newCell.ghostColor = this._hexToRgba(
+            newCell.ghostColor,
+            newCell.ghostFade ?? 0.13
+          );
         }
         newGrid[r][c] = newCell;
       }
