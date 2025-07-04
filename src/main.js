@@ -22,6 +22,7 @@ const vibranceSlider = document.getElementById('vibrance-slider');
 const vibranceValue = document.getElementById('vibrance-value');
 const bsBirth = document.getElementById('bs-birth');
 const bsSurvive = document.getElementById('bs-survive');
+const showGridCheckbox = document.getElementById('showgrid-checkbox');
 
 // Grid settings
 let cellSize = parseInt(cellSizeSlider.value);
@@ -37,6 +38,7 @@ let ghostFadeBase = parseInt(ghostFadeSlider.value) / 100;
 let colorMode = colorModeSelect.value;
 let neighborType = neighborTypeSelect.value;
 let vibrance = parseInt(vibranceSlider.value);
+let showGrid = showGridCheckbox.checked;
 let animationId = null;
 let lastFrame = 0;
 let frameInterval = 1000 / fps;
@@ -99,6 +101,22 @@ function drawGrid() {
         ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
       }
     }
+  }
+  if (showGrid) {
+    ctx.strokeStyle = "rgba(255,255,255,0.1)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let x = 0; x <= cols; x++) {
+      const xPos = x * cellSize + 0.5;
+      ctx.moveTo(xPos, 0);
+      ctx.lineTo(xPos, rows * cellSize);
+    }
+    for (let y = 0; y <= rows; y++) {
+      const yPos = y * cellSize + 0.5;
+      ctx.moveTo(0, yPos);
+      ctx.lineTo(cols * cellSize, yPos);
+    }
+    ctx.stroke();
   }
 }
 
@@ -166,6 +184,10 @@ vibranceSlider.oninput = function(e) {
   vibranceValue.innerText = vibrance;
   game.setVibrance(vibrance);
 };
+showGridCheckbox.onchange = function(e) {
+  showGrid = e.target.checked;
+  drawGrid();
+};
 speedSlider.oninput = function(e) {
   fps = parseInt(e.target.value);
   speedValue.innerText = fps;
@@ -201,6 +223,7 @@ speedValue.innerText = fps;
 cellSizeValue.innerText = cellSize;
 ghostFadeValue.innerText = ghostFadeBase.toFixed(2);
 vibranceValue.innerText = vibrance;
+showGridCheckbox.checked = showGrid;
 
 // --- Responsive resizing ---
 window.addEventListener('resize', () => resizeCanvasAndGrid(true));
