@@ -9,7 +9,19 @@
 <body>
   <canvas id="game-canvas"></canvas>
   <div id="ui-overlay">
-    <div id="top-controls">
+    <div id="bottom-controls">
+      <div id="panel">
+        <div>
+          <label for="born-slider">Cells Born At:</label>
+          <input type="range" id="born-slider" min="1" max="10" value="3">
+          <span id="born-value">3</span>
+        </div>
+        <div>
+          <label for="survive-slider">Survival Count:</label>
+          <input type="range" id="survive-slider" min="1" max="10" value="2">
+          <span id="survive-value">2</span>
+        </div>
+      </div>
       <button id="start-pause">▶ Start / ⏸ Pause</button>
       <button id="clear">🧹 Clear</button>
       <button id="reset">🔄 Reset</button>
@@ -17,19 +29,7 @@
       <button id="zoom-out">➖</button>
       <label for="color-picker" class="color-label">🎨</label>
       <input type="color" id="color-picker" value="#ff00cc">
-    </div>
-    <div id="panel">
-      <div>
-        <label for="born-slider">Cells Born At:</label>
-        <input type="range" id="born-slider" min="1" max="10" value="3">
-        <span id="born-value">3</span>
-      </div>
-      <div>
-        <label for="survive-slider">Survival Count:</label>
-        <input type="range" id="survive-slider" min="1" max="10" value="2">
-        <span id="survive-value">2</span>
-      </div>
-      <div>
+      <div id="speed-controls">
         <label for="speed-slider">Simulation Speed:</label>
         <input type="range" id="speed-slider" min="1" max="60" value="30">
         <span id="speed-value">30</span> fps

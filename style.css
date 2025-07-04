@@ -36,24 +36,42 @@ body {
   z-index: 10;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: center;
 }
 
-#top-controls {
-  margin-top: 2vh;
+#bottom-controls {
+  width: 100vw;
   background: rgba(255,255,255,0.95);
-  border-radius: 10px;
-  box-shadow: 0 2px 16px #000a;
-  padding: 8px 18px;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -2px 16px #000a;
+  padding: 10px 12px 10px 12px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.6em;
+  justify-content: center;
+  gap: 1em;
   pointer-events: auto;
   z-index: 20;
+  position: relative;
+  bottom: 0;
 }
 
-#top-controls button,
-#top-controls label.color-label {
+#panel {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5em;
+  align-items: center;
+}
+
+#panel > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+#bottom-controls button,
+#bottom-controls label.color-label {
   background: #111;
   color: #fff;
   border: none;
@@ -69,8 +87,8 @@ body {
   align-items: center;
 }
 
-#top-controls button:hover,
-#top-controls label.color-label:hover {
+#bottom-controls button:hover,
+#bottom-controls label.color-label:hover {
   background: #ff00cc;
   color: #fff;
 }
@@ -86,25 +104,15 @@ body {
   outline: none;
 }
 
-#panel {
-  margin-top: 2vh;
-  background: rgba(255,255,255,0.92);
-  border-radius: 9px;
-  box-shadow: 0 2px 16px #0008;
-  padding: 16px 32px 12px 32px;
+#speed-controls {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  pointer-events: auto;
-  z-index: 20;
-}
-
-#panel > div {
-  margin-bottom: 10px;
+  gap: 0.4em;
+  margin-left: 1em;
 }
 
 input[type="range"] {
-  width: 130px;
+  width: 110px;
 }
 
 label {
@@ -114,17 +122,22 @@ label {
 
 #born-value, #survive-value, #speed-value {
   font-weight: bold;
-  margin-left: 0.5em;
+  margin-left: 0.3em;
   color: #aa0099;
 }
 
-@media (max-width: 600px) {
-  #top-controls {
-    flex-wrap: wrap;
-    font-size: 0.9em;
-    padding: 6px 8px;
+@media (max-width: 900px) {
+  #bottom-controls {
+    flex-direction: column;
+    gap: 0.6em;
+    padding: 8px 2vw 10px 2vw;
   }
   #panel {
-    padding: 9px 10px 9px 10px;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+  #speed-controls {
+    margin-left: 0;
+    margin-top: 0.5em;
   }
 }
