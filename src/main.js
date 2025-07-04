@@ -46,6 +46,7 @@ let lastFrame = 0;
 let frameInterval = 1000 / fps;
 let frameCount = 0;
 let forward = true;
+let patternPreviewZoom = 1;
 
 // --- B/S Rule Checkboxes ---
 function makeCheckboxGroup(container, arr, labelPrefix, onChange) {
@@ -287,6 +288,8 @@ const patternModal = document.getElementById('pattern-modal');
 const closePatternsBtn = document.getElementById('close-patterns-menu');
 const patternList = document.getElementById('pattern-list');
 const patternSearch = document.getElementById('pattern-search');
+const patternZoomSlider = document.getElementById('pattern-zoom');
+patternPreviewZoom = parseFloat(patternZoomSlider.value);
 
 // Show modal
 openPatternsBtn.onclick = function() {
@@ -307,6 +310,10 @@ patternModal.addEventListener('mousedown', e => {
 patternSearch.oninput = function() {
   renderPatternList(patternSearch.value.trim());
 };
+patternZoomSlider.oninput = function() {
+  patternPreviewZoom = parseFloat(patternZoomSlider.value);
+  renderPatternList(patternSearch.value.trim());
+};
 
 function renderPatternList(filter) {
   const filterLower = filter.toLowerCase();
@@ -320,7 +327,7 @@ function renderPatternList(filter) {
       // Render preview
       const preview = document.createElement('div');
       preview.className = 'pattern-preview';
-      preview.appendChild(makePatternCanvas(pattern));
+      preview.appendChild(makePatternCanvas(pattern, patternPreviewZoom));
       // Name
       const pname = document.createElement('div');
       pname.className = 'pattern-name';
@@ -337,14 +344,15 @@ function renderPatternList(filter) {
     });
 }
 // Helper: Make a mini-canvas for preview
-function makePatternCanvas(pattern) {
-  const size = 28;
+function makePatternCanvas(pattern, zoom = 1) {
   const pad = 2;
   const rows = pattern.length;
   const cols = Math.max(...pattern.map(row => row.length));
-  const cell = Math.min(size / cols, size / rows, 6);
-  const w = cols * cell + pad*2;
-  const h = rows * cell + pad*2;
+  const maxDim = Math.max(rows, cols);
+  const base = 80 * zoom;
+  const cell = Math.max(2, Math.min(10, Math.floor(base / maxDim)));
+  const w = cols * cell + pad * 2;
+  const h = rows * cell + pad * 2;
   const c = document.createElement('canvas');
   c.width = w; c.height = h; c.style.width = w+'px'; c.style.height = h+'px';
   const ctx = c.getContext('2d');
