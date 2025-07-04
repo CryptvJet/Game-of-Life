@@ -15,7 +15,7 @@ const surviveSlider = document.getElementById('survive-slider');
 const surviveValue = document.getElementById('survive-value');
 
 // Grid settings
-let cellSize = 8;
+let cellSize = 10;
 let rows, cols, game;
 let animationId;
 let running = false;
@@ -26,11 +26,25 @@ let bornAt = parseInt(bornSlider.value); // Default 3
 let surviveCount = parseInt(surviveSlider.value); // Default 2
 
 function resizeCanvasAndGrid() {
-  canvas.width = 600;
-  canvas.height = 600;
+  // Calculate available height for canvas (window - controls)
+  const layout = document.getElementById('main-layout');
+  // Find space taken by controls
+  const controlsHeight = (
+    document.getElementById('controls').offsetHeight +
+    document.getElementById('color-controls').offsetHeight +
+    document.getElementById('sliders').offsetHeight +
+    60 // Extra margin/padding fudge factor
+  );
+  const availableHeight = window.innerHeight - controlsHeight;
+  // Fill as much as possible
+  canvas.width = window.innerWidth;
+  canvas.height = Math.max(200, availableHeight);
+
   cols = Math.floor(canvas.width / cellSize);
   rows = Math.floor(canvas.height / cellSize);
-  game = new GameOfLife(rows, cols, bornAt, surviveCount);
+  if (!game || game.rows !== rows || game.cols !== cols) {
+    game = new GameOfLife(rows, cols, bornAt, surviveCount);
+  }
 }
 
 function drawGrid() {
@@ -108,10 +122,14 @@ surviveSlider.oninput = function(e) {
 // --- Initial Setup ---
 bornValue.innerText = bornAt;
 surviveValue.innerText = surviveCount;
-resizeCanvasAndGrid();
-drawGrid();
 
-window.addEventListener('resize', () => {
+// Responsive resizing
+function onResize() {
   resizeCanvasAndGrid();
   drawGrid();
-});
+}
+window.addEventListener('resize', onResize);
+
+// Initial load
+resizeCanvasAndGrid();
+drawGrid();
