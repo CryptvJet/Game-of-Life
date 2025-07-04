@@ -103,7 +103,7 @@ function drawGrid() {
     }
   }
   if (showGrid) {
-    ctx.strokeStyle = "rgba(255,255,255,0.1)";
+    ctx.strokeStyle = "rgba(0,0,0,0.3)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     for (let x = 0; x <= cols; x++) {
@@ -186,6 +186,7 @@ vibranceSlider.oninput = function(e) {
 };
 showGridCheckbox.onchange = function(e) {
   showGrid = e.target.checked;
+  canvas.style.background = showGrid ? '#fff' : '#000';
   drawGrid();
 };
 speedSlider.oninput = function(e) {
@@ -224,6 +225,7 @@ cellSizeValue.innerText = cellSize;
 ghostFadeValue.innerText = ghostFadeBase.toFixed(2);
 vibranceValue.innerText = vibrance;
 showGridCheckbox.checked = showGrid;
+canvas.style.background = showGrid ? '#fff' : '#000';
 
 // --- Responsive resizing ---
 window.addEventListener('resize', () => resizeCanvasAndGrid(true));
