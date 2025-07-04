@@ -10,10 +10,6 @@ const resetBtn = document.getElementById('reset');
 const zoomInBtn = document.getElementById('zoom-in');
 const zoomOutBtn = document.getElementById('zoom-out');
 const colorPicker = document.getElementById('color-picker');
-const bornSlider = document.getElementById('born-slider');
-const bornValue = document.getElementById('born-value');
-const surviveSlider = document.getElementById('survive-slider');
-const surviveValue = document.getElementById('survive-value');
 const speedSlider = document.getElementById('speed-slider');
 const speedValue = document.getElementById('speed-value');
 const cellSizeSlider = document.getElementById('cellsize-slider');
@@ -140,11 +136,11 @@ function animate(now = 0) {
 startPauseBtn.onclick = function() {
   running = !running;
   if (running) {
-    startPauseBtn.innerText = '⏸ Pause';
+    startPauseBtn.innerText = '\u23f8 Pause';
     lastFrame = 0;
     animate();
   } else {
-    startPauseBtn.innerText = '▶ Start';
+    startPauseBtn.innerText = '\u25b6 Start / \u23F8 Pause';
     cancelAnimationFrame(animationId);
     animationId = null;
   }
@@ -187,18 +183,6 @@ vibranceSlider.oninput = function(e) {
   vibranceValue.innerText = vibrance;
   game.setVibrance(vibrance);
 };
-bornSlider.oninput = function(e) {
-  let v = parseInt(e.target.value);
-  bornValue.innerText = v;
-  bsBirth.querySelectorAll('input[type=checkbox]').forEach((cb, i) => cb.checked = (i === v));
-  updateBSRules();
-};
-surviveSlider.oninput = function(e) {
-  let v = parseInt(e.target.value);
-  surviveValue.innerText = v;
-  bsSurvive.querySelectorAll('input[type=checkbox]').forEach((cb, i) => cb.checked = (i === v));
-  updateBSRules();
-};
 speedSlider.oninput = function(e) {
   fps = parseInt(e.target.value);
   speedValue.innerText = fps;
@@ -207,7 +191,7 @@ speedSlider.oninput = function(e) {
 
 // --- Drawing/Painting ---
 let painting = false;
-function paintCell(e) {
+function pointerToCell(e) {
   const rect = canvas.getBoundingClientRect();
   let clientX = e.touches ? e.touches[0].clientX : e.clientX;
   let clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -215,6 +199,11 @@ function paintCell(e) {
   const y = clientY - rect.top;
   const col = Math.floor(x / cellSize);
   const row = Math.floor(y / cellSize);
+  return { row, col };
+}
+function paintCell(e) {
+  if (!game) return;
+  const { row, col } = pointerToCell(e);
   game.paint(row, col, aliveColor, colorMode);
   drawGrid();
 }
@@ -225,8 +214,6 @@ canvas.addEventListener('pointerleave', () => painting = false);
 canvas.addEventListener('touchend', () => painting = false);
 
 // --- Sliders display ---
-bornValue.innerText = bornAt[0];
-surviveValue.innerText = surviveCount[0];
 speedValue.innerText = fps;
 cellSizeValue.innerText = cellSize;
 ghostFadeValue.innerText = ghostFadeBase.toFixed(2);

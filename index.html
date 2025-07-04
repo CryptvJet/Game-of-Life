@@ -11,19 +11,16 @@
   <div id="ui-overlay">
     <div id="bottom-controls">
       <div id="panel">
-        <!-- 1. Cell Size / Grid Zoom -->
         <div>
           <label for="cellsize-slider">Cell Size:</label>
           <input type="range" id="cellsize-slider" min="5" max="40" value="13">
           <span id="cellsize-value">13</span>
         </div>
-        <!-- 2. Ghost Fade Speed -->
         <div>
           <label for="ghostfade-slider">Ghost Fade:</label>
           <input type="range" id="ghostfade-slider" min="0" max="100" value="18">
           <span id="ghostfade-value">0.18</span>
         </div>
-        <!-- 4. Color Mode -->
         <div>
           <label for="colormode-select">Color Mode:</label>
           <select id="colormode-select">
@@ -33,7 +30,6 @@
             <option value="blend">Blend Neighbors</option>
           </select>
         </div>
-        <!-- 5. Neighbor Type -->
         <div>
           <label for="neighbortype-select">Neighbors:</label>
           <select id="neighbortype-select">
@@ -42,31 +38,27 @@
             <option value="extended">24 (Extended)</option>
           </select>
         </div>
-        <!-- 6. Multiple Survival/Birth Counts -->
         <div>
           <label>B/S Rules:</label>
           <span id="bs-birth"></span>
           <span id="bs-survive"></span>
         </div>
-        <!-- 13. Color Vibrance -->
         <div>
           <label for="vibrance-slider">Vibrance:</label>
           <input type="range" id="vibrance-slider" min="0" max="200" value="100">
           <span id="vibrance-value">100</span>%
         </div>
       </div>
-      <!-- 11. Pattern Library -->
       <div id="patterns-panel">
         <label>Patterns:</label>
         <div id="patterns-buttons"></div>
       </div>
-      <!-- Classic controls -->
-      <button id="start-pause">▶ Start / ⏸ Pause</button>
-      <button id="clear">🧹 Clear</button>
-      <button id="reset">🔄 Reset</button>
-      <button id="zoom-in">➕</button>
-      <button id="zoom-out">➖</button>
-      <label for="color-picker" class="color-label">🎨</label>
+      <button id="start-pause">&#x25B6; Start / &#x23F8; Pause</button>
+      <button id="clear">&#129689; Clear</button>
+      <button id="reset">&#128260; Reset</button>
+      <button id="zoom-in">&#10133;</button>
+      <button id="zoom-out">&#10134;</button>
+      <label for="color-picker" class="color-label">&#127912;</label>
       <input type="color" id="color-picker" value="#ff00cc">
       <div id="speed-controls">
         <label for="speed-slider">Speed:</label>
