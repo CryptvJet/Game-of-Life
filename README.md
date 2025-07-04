@@ -108,6 +108,10 @@ Edit
 🖼 Screenshots
 (Coming soon!)
 
+🧪 Running Tests
+Install Node.js from https://nodejs.org/
+Run `npm test` to execute the test suite.
+
 🙌 Credits
 John Conway – Game of Life inspiration
 

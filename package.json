@@ -1,0 +1,8 @@
+{
+  "name": "game-of-life",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sh -c 'for f in tests/*.mjs; do node \"$f\"; done'"
+  }
+}
