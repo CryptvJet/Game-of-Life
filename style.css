@@ -1,167 +1,82 @@
-html, body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background: #000;
-  overflow: hidden;
-}
-body {
-  height: 100vh;
-  width: 100vw;
-  position: relative;
-  font-family: 'Segoe UI', sans-serif;
-}
-#game-canvas {
-  position: absolute;
-  left: 0; top: 0;
-  width: 100vw;
-  height: 100vh;
-  display: block;
-  z-index: 1;
-  background: #000;
-  cursor: crosshair;
-  touch-action: none;
-}
-#ui-overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-}
-#bottom-controls {
-  width: 100vw;
-  background: rgba(255,255,255,0.95);
-  border-radius: 16px 16px 0 0;
-  box-shadow: 0 -2px 16px #000a;
-  padding: 10px 12px 10px 12px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+/* ...existing styles above... */
+
+/* Pattern Modal Styles */
+#pattern-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.65);
   justify-content: center;
-  gap: 1em;
-  pointer-events: auto;
-  z-index: 20;
+  align-items: center;
+}
+#pattern-modal.visible { display: flex; }
+#pattern-modal-content {
+  background: #fff;
+  color: #222;
+  border-radius: 10px;
+  padding: 1.5em;
+  min-width: 340px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 6px 32px #0007;
   position: relative;
-  bottom: 0;
-}
-#panel {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1.3em;
-  align-items: center;
-  margin-right: 1.5em;
-}
-#panel > div {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}
-#patterns-panel {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-right: 1.5em;
+  align-items: stretch;
 }
-#patterns-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4em;
-  margin-top: 2px;
+#pattern-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1em;
+  margin-top: 1em;
 }
-.pattern-button {
-  background: #222;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.97em;
-  padding: 4px 9px;
-  cursor: pointer;
-  margin: 0;
-  transition: background 0.15s, color 0.15s;
-}
-.pattern-button:hover {
-  background: #ff00cc;
-  color: #fff;
-}
-#bottom-controls button,
-#bottom-controls label.color-label {
-  background: #111;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.1em;
-  padding: 7px 12px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  outline: none;
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-#bottom-controls button:hover,
-#bottom-controls label.color-label:hover {
-  background: #ff00cc;
-  color: #fff;
-}
-#color-picker {
-  border: none;
-  margin-left: 0.3em;
-  width: 32px;
-  height: 32px;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-  outline: none;
-}
-#speed-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.4em;
-  margin-left: 1em;
-}
-input[type="range"] {
-  width: 90px;
-}
-#cellsize-slider { width: 70px; }
-#ghostfade-slider { width: 70px; }
-#vibrance-slider { width: 70px; }
-select {
-  font-size: 1em;
-  border-radius: 4px;
-  padding: 2px 4px;
-  border: 1px solid #bbb;
+.pattern-item {
+  border: 1px solid #aaa;
+  border-radius: 6px;
   background: #f8f8f8;
+  padding: 0.7em 0.4em 0.6em 0.4em;
+  cursor: pointer;
+  transition: border 0.15s, box-shadow 0.15s, background 0.15s;
+  text-align: center;
+  user-select: none;
 }
-label {
-  font-size: 1em;
-  color: #222;
+.pattern-item:hover {
+  border: 2px solid #ff00cc;
+  background: #fff0fa;
+  box-shadow: 0 0 0 2px #ff00cc33;
 }
-#born-value, #survive-value, #speed-value, #cellsize-value, #ghostfade-value, #vibrance-value {
-  font-weight: bold;
-  margin-left: 0.3em;
+.pattern-preview {
+  display: inline-block;
+  margin-bottom: 0.3em;
+}
+.pattern-name {
+  font-size: 0.99em;
+  font-weight: 600;
   color: #aa0099;
+  margin-bottom: 0.1em;
+  word-break: break-word;
 }
-@media (max-width: 1200px) {
-  #panel { flex-wrap: wrap; gap: 0.7em; margin-right: 0.7em; }
-  #patterns-panel { margin-right: 0.7em; }
+.close-btn {
+  position: absolute; right: 1.2em; top: 1.2em;
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #aa0099;
+  cursor: pointer;
+  z-index: 5;
 }
-@media (max-width: 900px) {
-  #bottom-controls {
-    flex-direction: column;
-    gap: 0.7em;
-    padding: 8px 2vw 10px 2vw;
-  }
-  #panel { flex-direction: column; gap: 0.4em; margin-right: 0; }
-  #patterns-panel { margin-right: 0; }
-  #speed-controls { margin-left: 0; margin-top: 0.5em; }
+#pattern-search {
+  font-size: 1.08em;
+  padding: 0.4em 0.8em;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  margin-bottom: 0.6em;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
+
+/* ...rest of your styles... */
