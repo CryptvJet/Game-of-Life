@@ -2,7 +2,7 @@ export class GameOfLife {
   constructor(
     rows, cols,
     bornAt = [2], surviveCount = [2],
-    ghostFade = 0.18,
+    ghostFade = 0,
     colorMode = "picked",
     neighborType = "moore",
     vibrance = 100
