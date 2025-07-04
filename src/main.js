@@ -1,5 +1,8 @@
 import { GameOfLife } from './game.js';
 
+// --- Parameters for block size ---
+const BLOCK_SIZE = 10; // Each visual cell is a 10x10 logical cell block
+
 // UI Elements
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
@@ -16,15 +19,16 @@ const surviveValue = document.getElementById('survive-value');
 const speedSlider = document.getElementById('speed-slider');
 const speedValue = document.getElementById('speed-value');
 
-// Grid settings
+// "Visual cell" settings
 let cellSize = 13;
-let rows, cols, game;
+let displayCols, displayRows;
+let game;
 let running = false;
 let aliveColor = colorPicker.value;
 
-// Rule settings (slider value * 10)
-let bornAt = parseInt(bornSlider.value) * 10;
-let surviveCount = parseInt(surviveSlider.value) * 10;
+// Rule settings
+let bornAt = parseInt(bornSlider.value);
+let surviveCount = parseInt(surviveSlider.value);
 
 // Animation speed
 let fps = parseInt(speedSlider.value);
@@ -36,13 +40,18 @@ let frameInterval = 1000 / fps;
 function resizeCanvasAndGrid(keepState = false) {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  cols = Math.floor(canvas.width / cellSize);
-  rows = Math.floor(canvas.height / cellSize);
+
+  displayCols = Math.floor(canvas.width / cellSize);
+  displayRows = Math.floor(canvas.height / cellSize);
+
+  // Underlying logical grid is BLOCK_SIZE times finer
+  let logicCols = displayCols * BLOCK_SIZE;
+  let logicRows = displayRows * BLOCK_SIZE;
 
   if (keepState && game) {
-    game.resize(rows, cols);
+    game.resize(logicRows, logicCols);
   } else {
-    game = new GameOfLife(rows, cols, bornAt, surviveCount);
+    game = new GameOfLife(logicRows, logicCols, bornAt, surviveCount);
   }
   drawGrid();
 }
@@ -50,15 +59,55 @@ function resizeCanvasAndGrid(keepState = false) {
 // --- Drawing ---
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      const cell = game.getCell(row, col);
-      if (cell && cell.alive) {
-        ctx.fillStyle = cell.color || aliveColor;
-        ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-      } else if (cell && cell.ghost) {
-        ctx.fillStyle = cell.ghostColor || "rgba(255,0,255,0.13)";
-        ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+
+  for (let dRow = 0; dRow < displayRows; dRow++) {
+    for (let dCol = 0; dCol < displayCols; dCol++) {
+      // Aggregate the block
+      let aliveCount = 0;
+      let ghostCount = 0;
+      let colorSum = [0, 0, 0];
+      let ghostColorSum = [0, 0, 0];
+      let ghostAlphaSum = 0;
+      for (let y = 0; y < BLOCK_SIZE; y++) {
+        for (let x = 0; x < BLOCK_SIZE; x++) {
+          let row = dRow * BLOCK_SIZE + y;
+          let col = dCol * BLOCK_SIZE + x;
+          const cell = game.getCell(row, col);
+          if (cell && cell.alive) {
+            aliveCount++;
+            if (cell.color) {
+              const rgb = hexToRgbArr(cell.color);
+              colorSum[0] += rgb[0];
+              colorSum[1] += rgb[1];
+              colorSum[2] += rgb[2];
+            }
+          } else if (cell && cell.ghost && cell.ghostColor) {
+            ghostCount++;
+            const rgba = parseGhostRgba(cell.ghostColor);
+            ghostColorSum[0] += rgba[0];
+            ghostColorSum[1] += rgba[1];
+            ghostColorSum[2] += rgba[2];
+            ghostAlphaSum += rgba[3];
+          }
+        }
+      }
+      // Draw alive or ghost average
+      if (aliveCount > 0) {
+        ctx.fillStyle = rgbToHex(
+          colorSum[0]/aliveCount,
+          colorSum[1]/aliveCount,
+          colorSum[2]/aliveCount
+        );
+        ctx.fillRect(dCol * cellSize, dRow * cellSize, cellSize, cellSize);
+      } else if (ghostCount > 0) {
+        // Draw averaged ghost color, averaged alpha
+        ctx.fillStyle = rgbaString(
+          ghostColorSum[0]/ghostCount,
+          ghostColorSum[1]/ghostCount,
+          ghostColorSum[2]/ghostCount,
+          ghostAlphaSum/ghostCount
+        );
+        ctx.fillRect(dCol * cellSize, dRow * cellSize, cellSize, cellSize);
       }
     }
   }
@@ -116,13 +165,13 @@ colorPicker.oninput = function(e) {
 };
 
 bornSlider.oninput = function(e) {
-  bornAt = parseInt(e.target.value) * 10;
+  bornAt = parseInt(e.target.value);
   bornValue.innerText = bornAt;
   game.setRules(bornAt, surviveCount);
 };
 
 surviveSlider.oninput = function(e) {
-  surviveCount = parseInt(e.target.value) * 10;
+  surviveCount = parseInt(e.target.value);
   surviveValue.innerText = surviveCount;
   game.setRules(bornAt, surviveCount);
 };
@@ -134,6 +183,7 @@ speedSlider.oninput = function(e) {
 };
 
 // --- Drawing/Painting ---
+// Paint a BLOCK_SIZE x BLOCK_SIZE region
 let painting = false;
 
 function paintCell(e) {
@@ -142,9 +192,16 @@ function paintCell(e) {
   let clientY = e.touches ? e.touches[0].clientY : e.clientY;
   const x = clientX - rect.left;
   const y = clientY - rect.top;
-  const col = Math.floor(x / cellSize);
-  const row = Math.floor(y / cellSize);
-  game.paint(row, col, aliveColor);
+  const dCol = Math.floor(x / cellSize);
+  const dRow = Math.floor(y / cellSize);
+
+  for (let dy = 0; dy < BLOCK_SIZE; dy++) {
+    for (let dx = 0; dx < BLOCK_SIZE; dx++) {
+      const row = dRow * BLOCK_SIZE + dy;
+      const col = dCol * BLOCK_SIZE + dx;
+      game.paint(row, col, aliveColor);
+    }
+  }
   drawGrid();
 }
 
@@ -170,3 +227,22 @@ window.addEventListener('resize', () => resizeCanvasAndGrid(true));
 // --- Initial load ---
 resizeCanvasAndGrid();
 drawGrid();
+
+// --- COLOR helpers ---
+function hexToRgbArr(hex) {
+  hex = hex.replace(/^#/, "");
+  if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+  const int = parseInt(hex, 16);
+  return [(int >> 16) & 255, (int >> 8) & 255, int & 255];
+}
+function rgbToHex(r, g, b) {
+  return "#" + [r, g, b].map(x => Math.round(x).toString(16).padStart(2, "0")).join('');
+}
+function parseGhostRgba(rgba) {
+  // "rgba(255,0,255,0.13)"
+  const arr = rgba.match(/[\d.]+/g).map(Number);
+  return arr; // [r,g,b,a]
+}
+function rgbaString(r,g,b,a) {
+  return `rgba(${Math.round(r)},${Math.round(g)},${Math.round(b)},${a})`;
+}

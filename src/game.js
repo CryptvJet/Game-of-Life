@@ -1,5 +1,5 @@
 export class GameOfLife {
-  constructor(rows, cols, bornAt = 10, surviveCount = 10) {
+  constructor(rows, cols, bornAt = 3, surviveCount = 2) {
     this.rows = rows;
     this.cols = cols;
     this.bornAt = bornAt;
