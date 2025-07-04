@@ -64,6 +64,7 @@ Test color-as-frequency or waveform logic
 Clone or download the repository.
 
 Open index.html in any modern browser.
+Default cell size and speed values can be changed in `src/main.js`.
 
 Click/drag on the canvas to paint live cells with the selected color.
 
@@ -96,14 +97,13 @@ From this duality, rhythm, resonance, and color emerge — encoded here as livin
 🔊 Sound generation from color values (synthesis-based)
 
 📁 Project Structure
-plaintext
-Copy
-Edit
 /index.html          <- Core simulation + controls
 /style.css           <- Visual layout & theming
-/script.js           <- Core ColorLife engine
+/src/main.js         <- UI and controls
+/src/game.js         <- Core ColorLife engine
 /theory.md           <- Binary Pulse Theory docs (coming)
-/patterns.js         <- Pattern presets (optional)
+/src/patterns.js     <- Pattern presets (optional)
+/tests/	         <- Automated tests
 /README.md           <- Project documentation
 🖼 Screenshots
 (Coming soon!)
