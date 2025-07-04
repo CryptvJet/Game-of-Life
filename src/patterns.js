@@ -1,3 +1,52 @@
+function generateDolphinPattern() {
+  const w = 50, h = 50;
+  const body = '#00ced1';
+  const shade = '#4682b4';
+  const arr = Array.from({ length: h }, () => Array(w).fill(0));
+  const cx = 20, cy = 25, a = 15, b = 8;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (((x - cx) / a) ** 2 + ((y - cy) / b) ** 2 <= 1) {
+        arr[y][x] = body;
+      }
+      if ((x - 33) ** 2 + (y - 22) ** 2 <= 49) {
+        arr[y][x] = body;
+      }
+    }
+  }
+  for (let y = 18; y < 24; y++) {
+    for (let x = 18; x < 25; x++) {
+      if (y <= (-0.5 * (x - 18)) + 24) {
+        arr[y][x] = shade;
+      }
+    }
+  }
+  for (let y = 22; y < 32; y++) {
+    for (let x = 36; x < w; x++) {
+      if (Math.abs(y - 27) <= (x - 36) / 2) {
+        arr[y][x] = body;
+      }
+    }
+  }
+  arr[21][36] = shade;
+  return arr;
+}
+
+function generateWavePattern() {
+  const w = 50, h = 50;
+  const colors = ['#0000ff', '#00bfff', '#1e90ff', '#87cefa', '#e0ffff'];
+  const arr = Array.from({ length: h }, () => Array(w).fill(0));
+  for (let x = 0; x < w; x++) {
+    const hp = Math.round(10 * Math.sin((2 * Math.PI * x) / w)) + 25;
+    for (let y = hp; y < h; y++) {
+      const d = y - hp;
+      const color = d < colors.length ? colors[colors.length - 1 - d] : colors[0];
+      arr[y][x] = color;
+    }
+  }
+  return arr;
+}
+
 export const patternsList = {
   // Oscillators
   "Blinker": [
@@ -262,13 +311,7 @@ export const patternsList = {
     [0, "#000000", 0],
     [0, "#000000", 0]
   ],
-  "Dolphin": [
-    [0, "#00ced1", "#00ced1", 0],
-    ["#00ced1", "#4682b4", "#4682b4"],
-    [0, "#00ced1", 0],
-    [0, "#00ced1", 0],
-    [0, 0, 0]
-  ],
+  "Dolphin": generateDolphinPattern(),
   "Sun Over Beach": [
     ["#ffdd00", "#ffdd00", "#ffdd00"],
     [0, "#87ceeb", 0],
@@ -276,13 +319,7 @@ export const patternsList = {
     ["#f4a460", "#f4a460", "#f4a460"],
     ["#f4a460", "#f4a460", "#f4a460"]
   ],
-  "Ocean Wave 2": [
-    ["#0000ff", "#1e90ff", 0],
-    ["#1e90ff", "#00bfff", "#87cefa"],
-    [0, "#87cefa", "#e0ffff"],
-    ["#1e90ff", "#00bfff", "#0000ff"],
-    ["#0000ff", 0, 0]
-  ]
+  "Ocean Wave 2": generateWavePattern(),
   // Expand as much as you want!
 };
 
