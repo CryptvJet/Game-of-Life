@@ -11,19 +11,60 @@
   <div id="ui-overlay">
     <div id="bottom-controls">
       <div id="panel">
-        <!-- ...other controls like before... -->
         <div>
           <label for="cellsize-slider">Cell Size:</label>
           <input type="range" id="cellsize-slider" min="5" max="40" value="13">
           <span id="cellsize-value">13</span>
         </div>
-        <!-- ... -->
+        <div>
+          <label for="ghostfade-slider">Ghost Fade:</label>
+          <input type="range" id="ghostfade-slider" min="0" max="100" value="18">
+          <span id="ghostfade-value">0.18</span>
+        </div>
+        <div>
+          <label for="colormode-select">Color Mode:</label>
+          <select id="colormode-select">
+            <option value="picked">Picked</option>
+            <option value="random">Random</option>
+            <option value="hue">Hue Cycle</option>
+            <option value="blend">Blend Neighbors</option>
+          </select>
+        </div>
+        <div>
+          <label for="neighbortype-select">Neighbors:</label>
+          <select id="neighbortype-select">
+            <option value="moore">8 (Moore)</option>
+            <option value="vonneumann">4 (von Neumann)</option>
+            <option value="extended">24 (Extended)</option>
+          </select>
+        </div>
+        <div>
+          <label>B/S Rules:</label>
+          <span id="bs-birth"></span>
+          <span id="bs-survive"></span>
+        </div>
+        <div>
+          <label for="vibrance-slider">Vibrance:</label>
+          <input type="range" id="vibrance-slider" min="0" max="200" value="100">
+          <span id="vibrance-value">100</span>%
+        </div>
       </div>
       <div id="patterns-panel">
         <label>Patterns:</label>
         <button id="open-patterns-menu" class="pattern-menu-btn">Choose Pattern</button>
       </div>
-      <!-- ...other controls... -->
+      <button id="start-pause">&#x25B6; Start / &#x23F8; Pause</button>
+      <button id="clear">&#129689; Clear</button>
+      <button id="reset">&#128260; Reset</button>
+      <button id="zoom-in">&#10133;</button>
+      <button id="zoom-out">&#10134;</button>
+      <label for="color-picker" class="color-label">&#127912;</label>
+      <input type="color" id="color-picker" value="#ff00cc">
+      <div id="speed-controls">
+        <label for="speed-slider">Speed:</label>
+        <input type="range" id="speed-slider" min="1" max="60" value="5">
+        <span id="speed-value">5</span> fps
+      </div>
     </div>
   </div>
 

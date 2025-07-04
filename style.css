@@ -1,4 +1,164 @@
-/* ...existing styles above... */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: #000;
+  overflow: hidden;
+}
+body {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  font-family: 'Segoe UI', sans-serif;
+}
+#game-canvas {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: 1;
+  background: #000;
+  cursor: crosshair;
+  touch-action: none;
+}
+#ui-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+#bottom-controls {
+  width: 100vw;
+  background: rgba(255,255,255,0.95);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -2px 16px #000a;
+  padding: 10px 12px 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  pointer-events: auto;
+  z-index: 20;
+  position: relative;
+  bottom: 0;
+}
+#panel {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.3em;
+  align-items: center;
+  margin-right: 1.5em;
+}
+#panel > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+#patterns-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 1.5em;
+}
+.pattern-menu-btn {
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  padding: 6px 13px;
+  cursor: pointer;
+  margin-top: 3px;
+  transition: background 0.15s, color 0.15s;
+}
+.pattern-menu-btn:hover {
+  background: #ff00cc;
+  color: #fff;
+}
+#bottom-controls button,
+#bottom-controls label.color-label {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+  padding: 7px 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  outline: none;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+#bottom-controls button:hover,
+#bottom-controls label.color-label:hover {
+  background: #ff00cc;
+  color: #fff;
+}
+#color-picker {
+  border: none;
+  margin-left: 0.3em;
+  width: 32px;
+  height: 32px;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+#speed-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-left: 1em;
+}
+input[type="range"] {
+  width: 90px;
+}
+#cellsize-slider { width: 70px; }
+#ghostfade-slider { width: 70px; }
+#vibrance-slider { width: 70px; }
+select {
+  font-size: 1em;
+  border-radius: 4px;
+  padding: 2px 4px;
+  border: 1px solid #bbb;
+  background: #f8f8f8;
+}
+label {
+  font-size: 1em;
+  color: #222;
+}
+#born-value, #survive-value, #speed-value, #cellsize-value, #ghostfade-value, #vibrance-value {
+  font-weight: bold;
+  margin-left: 0.3em;
+  color: #aa0099;
+}
+@media (max-width: 1200px) {
+  #panel { flex-wrap: wrap; gap: 0.7em; margin-right: 0.7em; }
+  #patterns-panel { margin-right: 0.7em; }
+}
+@media (max-width: 900px) {
+  #bottom-controls {
+    flex-direction: column;
+    gap: 0.7em;
+    padding: 8px 2vw 10px 2vw;
+  }
+  #panel { flex-direction: column; gap: 0.4em; margin-right: 0; }
+  #patterns-panel { margin-right: 0; }
+  #speed-controls { margin-left: 0; margin-top: 0.5em; }
+}
 
 /* Pattern Modal Styles */
 #pattern-modal {
@@ -78,5 +238,3 @@
   margin-right: auto;
   display: block;
 }
-
-/* ...rest of your styles... */
