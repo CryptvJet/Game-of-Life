@@ -15,53 +15,53 @@ const surviveSlider = document.getElementById('survive-slider');
 const surviveValue = document.getElementById('survive-value');
 
 // Grid settings
-let cellSize = 10;
+let cellSize = 13;
 let rows, cols, game;
 let animationId;
 let running = false;
 let aliveColor = colorPicker.value;
 
 // Rule settings
-let bornAt = parseInt(bornSlider.value); // Default 3
-let surviveCount = parseInt(surviveSlider.value); // Default 2
+let bornAt = parseInt(bornSlider.value);
+let surviveCount = parseInt(surviveSlider.value);
 
-function resizeCanvasAndGrid() {
-  // Calculate available height for canvas (window - controls)
-  const layout = document.getElementById('main-layout');
-  // Find space taken by controls
-  const controlsHeight = (
-    document.getElementById('controls').offsetHeight +
-    document.getElementById('color-controls').offsetHeight +
-    document.getElementById('sliders').offsetHeight +
-    60 // Extra margin/padding fudge factor
-  );
-  const availableHeight = window.innerHeight - controlsHeight;
-  // Fill as much as possible
+// --- Canvas/grid resizing ---
+function resizeCanvasAndGrid(keepState = false) {
+  // Set canvas to fill viewport
   canvas.width = window.innerWidth;
-  canvas.height = Math.max(200, availableHeight);
-
+  canvas.height = window.innerHeight;
   cols = Math.floor(canvas.width / cellSize);
   rows = Math.floor(canvas.height / cellSize);
-  if (!game || game.rows !== rows || game.cols !== cols) {
+
+  if (keepState && game) {
+    // Optionally, you can add logic to preserve/resize state
+    game.resize(rows, cols);
+  } else {
     game = new GameOfLife(rows, cols, bornAt, surviveCount);
   }
+  drawGrid();
 }
 
+// --- Drawing ---
 function drawGrid() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      ctx.fillStyle = game.isAlive(row, col) ? aliveColor : "#ffe0fa";
-      ctx.fillRect(
-        col * cellSize,
-        row * cellSize,
-        cellSize - 1,
-        cellSize - 1
-      );
+      const cell = game.getCell(row, col);
+      if (cell && cell.alive) {
+        ctx.fillStyle = cell.color || aliveColor;
+        ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+      } else if (cell && cell.ghost) {
+        ctx.fillStyle = cell.ghostColor || "rgba(255,0,255,0.13)";
+        ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+      } else {
+        // ghost fade background is handled above
+      }
     }
   }
 }
 
+// --- Animation loop ---
 function animate() {
   game.step();
   drawGrid();
@@ -92,19 +92,16 @@ resetBtn.onclick = function() {
 
 zoomInBtn.onclick = function() {
   cellSize = Math.min(cellSize + 2, 40);
-  resizeCanvasAndGrid();
-  drawGrid();
+  resizeCanvasAndGrid(true);
 };
 
 zoomOutBtn.onclick = function() {
   cellSize = Math.max(cellSize - 2, 2);
-  resizeCanvasAndGrid();
-  drawGrid();
+  resizeCanvasAndGrid(true);
 };
 
 colorPicker.oninput = function(e) {
   aliveColor = e.target.value;
-  drawGrid();
 };
 
 bornSlider.oninput = function(e) {
@@ -119,17 +116,39 @@ surviveSlider.oninput = function(e) {
   game.setRules(bornAt, surviveCount);
 };
 
-// --- Initial Setup ---
+// --- Drawing/Painting ---
+let painting = false;
+
+function paintCell(e) {
+  const rect = canvas.getBoundingClientRect();
+  let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  const x = clientX - rect.left;
+  const y = clientY - rect.top;
+  const col = Math.floor(x / cellSize);
+  const row = Math.floor(y / cellSize);
+  game.paint(row, col, aliveColor);
+  drawGrid();
+}
+
+canvas.addEventListener('pointerdown', e => {
+  painting = true;
+  paintCell(e);
+});
+canvas.addEventListener('pointermove', e => {
+  if (painting) paintCell(e);
+});
+canvas.addEventListener('pointerup', () => painting = false);
+canvas.addEventListener('pointerleave', () => painting = false);
+canvas.addEventListener('touchend', () => painting = false);
+
+// --- Sliders display ---
 bornValue.innerText = bornAt;
 surviveValue.innerText = surviveCount;
 
-// Responsive resizing
-function onResize() {
-  resizeCanvasAndGrid();
-  drawGrid();
-}
-window.addEventListener('resize', onResize);
+// --- Responsive resizing ---
+window.addEventListener('resize', () => resizeCanvasAndGrid(true));
 
-// Initial load
+// --- Initial load ---
 resizeCanvasAndGrid();
 drawGrid();
