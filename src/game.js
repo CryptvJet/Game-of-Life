@@ -32,8 +32,12 @@ export class GameOfLife {
 
   randomize(rRows = this.rows, rCols = this.cols) {
     this.clear();
-    const startRow = Math.floor((this.rows - rRows) / 2);
-    const startCol = Math.floor((this.cols - rCols) / 2);
+    rRows = Math.min(rRows, this.rows);
+    rCols = Math.min(rCols, this.cols);
+    let startRow = Math.floor((this.rows - rRows) / 2);
+    let startCol = Math.floor((this.cols - rCols) / 2);
+    startRow = Math.max(0, startRow);
+    startCol = Math.max(0, startCol);
     for (let r = 0; r < rRows && startRow + r < this.rows; r++) {
       for (let c = 0; c < rCols && startCol + c < this.cols; c++) {
         if (Math.random() > 0.5) {
