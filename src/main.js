@@ -157,7 +157,16 @@ startPauseBtn.onclick = function() {
   }
 };
 directionSlider.oninput = function(e) {
-  forward = parseInt(e.target.value) === 1;
+  const newForward = parseInt(e.target.value) === 1;
+  if (newForward !== forward) {
+    if (newForward) {
+      frameCount++;
+    } else {
+      frameCount = Math.max(0, frameCount - 1);
+    }
+    frameValue.innerText = frameCount;
+  }
+  forward = newForward;
   directionValue.innerText = forward ? 'Forward' : 'Reverse';
 };
 clearBtn.onclick = function() {
