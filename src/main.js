@@ -1,22 +1,44 @@
 import { GameOfLife } from './game.js';
-import { setupControls } from './ui.js';
-import { config } from './config.js';
 
-const canvas = document.getElementById('gameCanvas');
-const genCounter = document.getElementById('genCounter');
+const canvas = document.getElementById('game-canvas');
+const ctx = canvas.getContext('2d');
+let cellSize = 15;
+let rows, cols, game;
 
-// Responsive canvas
-function resizeCanvas() {
+function resizeCanvasAndGrid() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  if (window.game) window.game.resize();
+  cols = Math.floor(canvas.width / cellSize);
+  rows = Math.floor(canvas.height / cellSize);
+  game = new GameOfLife(rows, cols); // Fresh grid on resize
 }
-window.addEventListener('resize', resizeCanvas);
 
-// Game instance
-window.game = new GameOfLife(canvas, config, (gen) => {
-  genCounter.textContent = `Gen: ${gen}`;
+function drawGrid() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      ctx.fillStyle = game.isAlive(row, col) ? "#00FF00" : "#222";
+      ctx.fillRect(
+        col * cellSize,
+        row * cellSize,
+        cellSize - 1,
+        cellSize - 1
+      );
+    }
+  }
+}
+
+function animate() {
+  game.step();
+  drawGrid();
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', () => {
+  resizeCanvasAndGrid();
+  drawGrid();
 });
-resizeCanvas();
 
-setupControls(window.game);
+resizeCanvasAndGrid();
+drawGrid();
+animate();
