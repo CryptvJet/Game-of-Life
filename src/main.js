@@ -5,6 +5,7 @@ import { patternsList, insertPattern } from './patterns.js';
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 const startPauseBtn = document.getElementById('start-pause');
+const directionToggleBtn = document.getElementById('toggle-direction');
 const clearBtn = document.getElementById('clear');
 const resetBtn = document.getElementById('reset');
 const zoomInBtn = document.getElementById('zoom-in');
@@ -42,6 +43,7 @@ let animationId = null;
 let lastFrame = 0;
 let frameInterval = 1000 / fps;
 let frameCount = 0;
+let forward = true;
 
 // --- B/S Rule Checkboxes ---
 function makeCheckboxGroup(container, arr, labelPrefix, onChange) {
@@ -126,9 +128,14 @@ function animate(now = 0) {
   if (!lastFrame) lastFrame = now;
   const elapsed = now - lastFrame;
   if (elapsed >= frameInterval) {
-    game.step();
+    if (forward) {
+      game.step();
+      frameCount++;
+    } else {
+      game.stepBackward();
+      frameCount = Math.max(0, frameCount - 1);
+    }
     drawGrid();
-    frameCount++;
     frameValue.innerText = frameCount;
     lastFrame = now;
   }
@@ -147,6 +154,10 @@ startPauseBtn.onclick = function() {
     cancelAnimationFrame(animationId);
     animationId = null;
   }
+};
+directionToggleBtn.onclick = function() {
+  forward = !forward;
+  directionToggleBtn.innerText = forward ? '\u21c6 Forward' : '\u21c6 Reverse';
 };
 clearBtn.onclick = function() {
   game.clear();
