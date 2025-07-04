@@ -162,9 +162,14 @@ startPauseBtn.onclick = function() {
     animationId = null;
   }
 };
-menuToggle.onclick = function() {
+function toggleMenu() {
   bottomControls.classList.toggle('open');
-};
+}
+menuToggle.addEventListener('click', toggleMenu);
+menuToggle.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  toggleMenu();
+});
 directionSlider.oninput = function(e) {
   const newForward = parseInt(e.target.value) === 1;
   if (newForward !== forward) {
