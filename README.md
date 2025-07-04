@@ -66,6 +66,9 @@ Clone or download the repository.
 Open index.html in any modern browser.
 Default cell size and speed values can be changed in `src/main.js`.
 
+The zoom controls now allow shrinking cells down to a single pixel for a
+wide overview of large patterns.
+
 Click/drag on the canvas to paint live cells with the selected color.
 
 Click ▶ Start / ⏸ Pause to begin or stop the simulation.
