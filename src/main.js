@@ -279,7 +279,7 @@ window.addEventListener('resize', () => resizeCanvasAndGrid(true));
 // --- Initial load ---
 resizeCanvasAndGrid();
 game.clear();
-insertPattern(game, Math.floor(rows/2), Math.floor(cols/2), 'Rose', aliveColor, colorMode);
+insertPattern(game, Math.floor(rows/2), Math.floor(cols/2), 'RoseFullBloom', aliveColor, colorMode);
 drawGrid();
 
 // --- Pattern Modal Menu ---
