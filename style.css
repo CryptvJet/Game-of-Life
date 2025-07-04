@@ -36,6 +36,21 @@ body {
   justify-content: flex-end;
   align-items: center;
 }
+#menu-toggle {
+  display: none;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 25;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.5em;
+  padding: 6px 12px;
+  cursor: pointer;
+  pointer-events: auto;
+}
 #bottom-controls {
   width: 100vw;
   background: rgba(255,255,255,0.95);
@@ -51,6 +66,7 @@ body {
   z-index: 20;
   position: relative;
   bottom: 0;
+  transition: transform 0.3s ease;
 }
 #panel {
   display: flex;
@@ -156,10 +172,19 @@ label {
   #patterns-panel { margin-right: 0.7em; }
 }
 @media (max-width: 900px) {
+  #menu-toggle { display: block; }
   #bottom-controls {
     flex-direction: column;
     gap: 0.7em;
     padding: 8px 2vw 10px 2vw;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transform: translateY(100%);
+    width: 100vw;
+  }
+  #bottom-controls.open {
+    transform: none;
   }
   #panel { flex-direction: column; gap: 0.4em; margin-right: 0; }
   #patterns-panel { margin-right: 0; }

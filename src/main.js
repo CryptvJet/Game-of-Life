@@ -5,6 +5,8 @@ import { patternsList, insertPattern } from './patterns.js';
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 const startPauseBtn = document.getElementById('start-pause');
+const menuToggle = document.getElementById('menu-toggle');
+const bottomControls = document.getElementById('bottom-controls');
 const directionSlider = document.getElementById('direction-slider');
 const directionValue = document.getElementById('direction-value');
 const clearBtn = document.getElementById('clear');
@@ -159,6 +161,9 @@ startPauseBtn.onclick = function() {
     cancelAnimationFrame(animationId);
     animationId = null;
   }
+};
+menuToggle.onclick = function() {
+  bottomControls.classList.toggle('open');
 };
 directionSlider.oninput = function(e) {
   const newForward = parseInt(e.target.value) === 1;
