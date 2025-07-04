@@ -1,5 +1,5 @@
 export class GameOfLife {
-  constructor(rows, cols, bornAt = 3, surviveCount = 2) {
+  constructor(rows, cols, bornAt = 10, surviveCount = 10) {
     this.rows = rows;
     this.cols = cols;
     this.bornAt = bornAt;
@@ -12,7 +12,6 @@ export class GameOfLife {
     this.surviveCount = surviveCount;
   }
 
-  // For color/ghost logic, each cell: {alive, color, ghost, ghostColor, ghostFade}
   randomize() {
     this.grid = Array.from({ length: this.rows }, () =>
       Array.from({ length: this.cols }, () =>
@@ -81,13 +80,11 @@ export class GameOfLife {
         if (cell.alive) {
           if (liveNeighbors === this.surviveCount) {
             newCell.alive = 1;
-            // Keep color as is
           } else {
-            // Dies: becomes ghost
             newCell.alive = 0;
             newCell.ghost = 1;
             newCell.ghostColor = cell.color;
-            newCell.ghostFade = 0.18; // start ghost fade
+            newCell.ghostFade = 0.18;
             newCell.color = null;
           }
         } else {
@@ -98,7 +95,6 @@ export class GameOfLife {
             newCell.ghostColor = null;
             newCell.ghostFade = 0;
           } else if (cell.ghost) {
-            // Fade out ghost
             newCell.ghostFade = (cell.ghostFade || 0) * 0.93;
             if (newCell.ghostFade < 0.03) {
               newCell.ghost = 0;
@@ -107,12 +103,9 @@ export class GameOfLife {
             }
           }
         }
-        // Set ghost color fade
         if (newCell.ghost && newCell.ghostColor) {
-          // ghostColor is hex, fade alpha
           newCell.ghostColor = this._hexToRgba(newCell.ghostColor, newCell.ghostFade || 0.13);
         }
-
         newGrid[r][c] = newCell;
       }
     }
@@ -128,7 +121,6 @@ export class GameOfLife {
     return dirs.map(([dr, dc]) => this.getCell(row + dr, col + dc));
   }
 
-  // --- Color helpers ---
   _randomColor() {
     const h = Math.floor(Math.random() * 360);
     return `hsl(${h},90%,60%)`;

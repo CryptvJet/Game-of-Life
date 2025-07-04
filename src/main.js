@@ -22,9 +22,9 @@ let rows, cols, game;
 let running = false;
 let aliveColor = colorPicker.value;
 
-// Rule settings
-let bornAt = parseInt(bornSlider.value);
-let surviveCount = parseInt(surviveSlider.value);
+// Rule settings (slider value * 10)
+let bornAt = parseInt(bornSlider.value) * 10;
+let surviveCount = parseInt(surviveSlider.value) * 10;
 
 // Animation speed
 let fps = parseInt(speedSlider.value);
@@ -116,13 +116,13 @@ colorPicker.oninput = function(e) {
 };
 
 bornSlider.oninput = function(e) {
-  bornAt = parseInt(e.target.value);
+  bornAt = parseInt(e.target.value) * 10;
   bornValue.innerText = bornAt;
   game.setRules(bornAt, surviveCount);
 };
 
 surviveSlider.oninput = function(e) {
-  surviveCount = parseInt(e.target.value);
+  surviveCount = parseInt(e.target.value) * 10;
   surviveValue.innerText = surviveCount;
   game.setRules(bornAt, surviveCount);
 };
