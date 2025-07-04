@@ -5,7 +5,8 @@ export class GameOfLife {
     ghostFade = 0,
     colorMode = "picked",
     neighborType = "moore",
-    vibrance = 100
+    vibrance = 100,
+    neighborRadius = 1
   ) {
     this.rows = rows;
     this.cols = cols;
@@ -15,6 +16,7 @@ export class GameOfLife {
     this.colorMode = colorMode;
     this.neighborType = neighborType;
     this.vibrance = vibrance;
+    this.neighborRadius = neighborRadius;
     this.history = [];
     this.maxHistory = 200;
     this.hue = Math.random() * 360;
@@ -29,6 +31,7 @@ export class GameOfLife {
   setColorMode(val) { this.colorMode = val; }
   setNeighborType(val) { this.neighborType = val; }
   setVibrance(val) { this.vibrance = val; }
+  setNeighborRadius(val) { this.neighborRadius = val; }
 
   randomize() {
     this.grid = Array.from({ length: this.rows }, () =>
@@ -148,28 +151,26 @@ export class GameOfLife {
   }
 
   _neighbors(row, col) {
-    let dirs;
+    let dirs = [];
+    const radius = this.neighborType === "extended" ? 2 : this.neighborRadius;
     switch (this.neighborType) {
       case "vonneumann":
-        dirs = [
-          [-1, 0], [0, -1], [0, 1], [1, 0]
-        ]; break;
-      case "extended":
-        dirs = [];
-        for (let dr = -2; dr <= 2; dr++) {
-          for (let dc = -2; dc <= 2; dc++) {
+        for (let dr = -radius; dr <= radius; dr++) {
+          for (let dc = -radius; dc <= radius; dc++) {
             if (dr === 0 && dc === 0) continue;
-            dirs.push([dr, dc]);
+            if (Math.abs(dr) + Math.abs(dc) <= radius) dirs.push([dr, dc]);
           }
         }
         break;
+      case "extended":
       case "moore":
       default:
-        dirs = [
-          [-1, -1], [-1, 0], [-1, 1],
-          [0, -1],           [0, 1],
-          [1, -1],  [1, 0],  [1, 1]
-        ];
+        for (let dr = -radius; dr <= radius; dr++) {
+          for (let dc = -radius; dc <= radius; dc++) {
+            if (dr === 0 && dc === 0) continue;
+            if (Math.max(Math.abs(dr), Math.abs(dc)) <= radius) dirs.push([dr, dc]);
+          }
+        }
         break;
     }
     return dirs.map(([dr, dc]) => this.getCell(row + dr, col + dc));

@@ -43,6 +43,7 @@ Color blending behavior
 Ghost fade logic
 
 📏 Multiple Neighbor Rules (planned): Moore, von Neumann, and Extended
+🔄 Adjustable neighbor radius for Moore/von Neumann neighborhoods
 
 🧬 Pattern Library (optional add-on):
 

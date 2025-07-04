@@ -22,6 +22,8 @@ const colorModeSelect = document.getElementById('colormode-select');
 const neighborTypeSelect = document.getElementById('neighbortype-select');
 const vibranceSlider = document.getElementById('vibrance-slider');
 const vibranceValue = document.getElementById('vibrance-value');
+const neighborRadiusSlider = document.getElementById('neighborradius-slider');
+const neighborRadiusValue = document.getElementById('neighborradius-value');
 const bsBirth = document.getElementById('bs-birth');
 const bsSurvive = document.getElementById('bs-survive');
 const showGridCheckbox = document.getElementById('showgrid-checkbox');
@@ -40,6 +42,7 @@ let ghostFadeBase = parseInt(ghostFadeSlider.value) / 100;
 let colorMode = colorModeSelect.value;
 let neighborType = neighborTypeSelect.value;
 let vibrance = parseInt(vibranceSlider.value);
+let neighborRadius = parseInt(neighborRadiusSlider.value);
 let showGrid = showGridCheckbox.checked;
 let animationId = null;
 let lastFrame = 0;
@@ -86,7 +89,7 @@ function resizeCanvasAndGrid(keepState = false) {
   if (keepState && game) {
     game.resize(rows, cols);
   } else {
-    game = new GameOfLife(rows, cols, bornAt, surviveCount, ghostFadeBase, colorMode, neighborType, vibrance);
+    game = new GameOfLife(rows, cols, bornAt, surviveCount, ghostFadeBase, colorMode, neighborType, vibrance, neighborRadius);
   }
   drawGrid();
 }
@@ -209,11 +212,24 @@ colorModeSelect.onchange = function(e) {
 neighborTypeSelect.onchange = function(e) {
   neighborType = neighborTypeSelect.value;
   game.setNeighborType(neighborType);
+  if (neighborType === 'extended') {
+    neighborRadius = 2;
+    neighborRadiusSlider.value = 2;
+    neighborRadiusValue.innerText = 2;
+    game.setNeighborRadius(2);
+  } else {
+    game.setNeighborRadius(neighborRadius);
+  }
 };
 vibranceSlider.oninput = function(e) {
   vibrance = parseInt(e.target.value);
   vibranceValue.innerText = vibrance;
   game.setVibrance(vibrance);
+};
+neighborRadiusSlider.oninput = function(e) {
+  neighborRadius = parseInt(e.target.value);
+  neighborRadiusValue.innerText = neighborRadius;
+  game.setNeighborRadius(neighborRadius);
 };
 showGridCheckbox.onchange = function(e) {
   showGrid = e.target.checked;
@@ -267,6 +283,7 @@ frameSlider.max = frameCount;
 frameSlider.value = frameCount;
 ghostFadeValue.innerText = ghostFadeBase.toFixed(2);
 vibranceValue.innerText = vibrance;
+neighborRadiusValue.innerText = neighborRadius;
 directionValue.innerText = forward ? 'Forward' : 'Reverse';
 directionSlider.value = forward ? 1 : 0;
 showGridCheckbox.checked = showGrid;
