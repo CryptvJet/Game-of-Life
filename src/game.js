@@ -139,7 +139,6 @@ export class GameOfLife {
     return `rgba(${r},${g},${b},${alpha})`;
   }
 
-  // Resize grid (preserving as much as possible)
   resize(newRows, newCols) {
     const newGrid = Array.from({ length: newRows }, (_, r) =>
       Array.from({ length: newCols }, (_, c) =>
