@@ -12,6 +12,7 @@ const zoomOutBtn = document.getElementById('zoom-out');
 const colorPicker = document.getElementById('color-picker');
 const speedSlider = document.getElementById('speed-slider');
 const speedValue = document.getElementById('speed-value');
+const frameValue = document.getElementById('frame-value');
 const ghostFadeSlider = document.getElementById('ghostfade-slider');
 const ghostFadeValue = document.getElementById('ghostfade-value');
 const colorModeSelect = document.getElementById('colormode-select');
@@ -40,6 +41,7 @@ let showGrid = showGridCheckbox.checked;
 let animationId = null;
 let lastFrame = 0;
 let frameInterval = 1000 / fps;
+let frameCount = 0;
 
 // --- B/S Rule Checkboxes ---
 function makeCheckboxGroup(container, arr, labelPrefix, onChange) {
@@ -126,6 +128,8 @@ function animate(now = 0) {
   if (elapsed >= frameInterval) {
     game.step();
     drawGrid();
+    frameCount++;
+    frameValue.innerText = frameCount;
     lastFrame = now;
   }
   animationId = requestAnimationFrame(animate);
@@ -144,8 +148,18 @@ startPauseBtn.onclick = function() {
     animationId = null;
   }
 };
-clearBtn.onclick = function() { game.clear(); drawGrid(); };
-resetBtn.onclick = function() { game.randomize(); drawGrid(); };
+clearBtn.onclick = function() {
+  game.clear();
+  drawGrid();
+  frameCount = 0;
+  frameValue.innerText = frameCount;
+};
+resetBtn.onclick = function() {
+  game.randomize();
+  drawGrid();
+  frameCount = 0;
+  frameValue.innerText = frameCount;
+};
 zoomInBtn.onclick = function() {
   cellSize = Math.min(cellSize + 2, 40);
   resizeCanvasAndGrid(true);
@@ -210,6 +224,7 @@ canvas.addEventListener('touchend', () => painting = false);
 
 // --- Sliders display ---
 speedValue.innerText = fps;
+frameValue.innerText = frameCount;
 ghostFadeValue.innerText = ghostFadeBase.toFixed(2);
 vibranceValue.innerText = vibrance;
 showGridCheckbox.checked = showGrid;
