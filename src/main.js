@@ -13,11 +13,12 @@ const bornSlider = document.getElementById('born-slider');
 const bornValue = document.getElementById('born-value');
 const surviveSlider = document.getElementById('survive-slider');
 const surviveValue = document.getElementById('survive-value');
+const speedSlider = document.getElementById('speed-slider');
+const speedValue = document.getElementById('speed-value');
 
 // Grid settings
 let cellSize = 13;
 let rows, cols, game;
-let animationId;
 let running = false;
 let aliveColor = colorPicker.value;
 
@@ -25,16 +26,20 @@ let aliveColor = colorPicker.value;
 let bornAt = parseInt(bornSlider.value);
 let surviveCount = parseInt(surviveSlider.value);
 
+// Animation speed
+let fps = parseInt(speedSlider.value);
+let animationId = null;
+let lastFrame = 0;
+let frameInterval = 1000 / fps;
+
 // --- Canvas/grid resizing ---
 function resizeCanvasAndGrid(keepState = false) {
-  // Set canvas to fill viewport
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   cols = Math.floor(canvas.width / cellSize);
   rows = Math.floor(canvas.height / cellSize);
 
   if (keepState && game) {
-    // Optionally, you can add logic to preserve/resize state
     game.resize(rows, cols);
   } else {
     game = new GameOfLife(rows, cols, bornAt, surviveCount);
@@ -54,17 +59,21 @@ function drawGrid() {
       } else if (cell && cell.ghost) {
         ctx.fillStyle = cell.ghostColor || "rgba(255,0,255,0.13)";
         ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-      } else {
-        // ghost fade background is handled above
       }
     }
   }
 }
 
-// --- Animation loop ---
-function animate() {
-  game.step();
-  drawGrid();
+// --- Animation loop with adjustable speed ---
+function animate(now = 0) {
+  if (!running) return;
+  if (!lastFrame) lastFrame = now;
+  const elapsed = now - lastFrame;
+  if (elapsed >= frameInterval) {
+    game.step();
+    drawGrid();
+    lastFrame = now;
+  }
   animationId = requestAnimationFrame(animate);
 }
 
@@ -73,10 +82,12 @@ startPauseBtn.onclick = function() {
   running = !running;
   if (running) {
     startPauseBtn.innerText = '⏸ Pause';
+    lastFrame = 0;
     animate();
   } else {
     startPauseBtn.innerText = '▶ Start';
     cancelAnimationFrame(animationId);
+    animationId = null;
   }
 };
 
@@ -116,6 +127,12 @@ surviveSlider.oninput = function(e) {
   game.setRules(bornAt, surviveCount);
 };
 
+speedSlider.oninput = function(e) {
+  fps = parseInt(e.target.value);
+  speedValue.innerText = fps;
+  frameInterval = 1000 / fps;
+};
+
 // --- Drawing/Painting ---
 let painting = false;
 
@@ -145,6 +162,7 @@ canvas.addEventListener('touchend', () => painting = false);
 // --- Sliders display ---
 bornValue.innerText = bornAt;
 surviveValue.innerText = surviveCount;
+speedValue.innerText = fps;
 
 // --- Responsive resizing ---
 window.addEventListener('resize', () => resizeCanvasAndGrid(true));
