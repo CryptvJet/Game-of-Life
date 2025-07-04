@@ -1,22 +1,38 @@
 export class GameOfLife {
-  constructor(rows, cols, bornAt = 3, surviveCount = 2) {
+  constructor(
+    rows, cols,
+    bornAt = [2], surviveCount = [2],
+    ghostFade = 0.18,
+    colorMode = "picked",
+    neighborType = "moore",
+    vibrance = 100
+  ) {
     this.rows = rows;
     this.cols = cols;
     this.bornAt = bornAt;
     this.surviveCount = surviveCount;
+    this.ghostFade = ghostFade;
+    this.colorMode = colorMode;
+    this.neighborType = neighborType;
+    this.vibrance = vibrance;
+    this.hue = Math.random() * 360;
     this.randomize();
   }
 
-  setRules(bornAt, surviveCount) {
-    this.bornAt = bornAt;
-    this.surviveCount = surviveCount;
+  setRules(bornArr, surviveArr) {
+    this.bornAt = bornArr;
+    this.surviveCount = surviveArr;
   }
+  setGhostFade(val) { this.ghostFade = val; }
+  setColorMode(val) { this.colorMode = val; }
+  setNeighborType(val) { this.neighborType = val; }
+  setVibrance(val) { this.vibrance = val; }
 
   randomize() {
     this.grid = Array.from({ length: this.rows }, () =>
       Array.from({ length: this.cols }, () =>
-        Math.random() > 0.77
-          ? { alive: 1, color: this._randomColor(), ghost: 0, ghostColor: null, ghostFade: 0 }
+        Math.random() > 0.8
+          ? { alive: 1, color: this._pickColor(), ghost: 0, ghostColor: null, ghostFade: 0 }
           : { alive: 0, color: null, ghost: 0, ghostColor: null, ghostFade: 0 }
       )
     );
@@ -35,11 +51,11 @@ export class GameOfLife {
     return this.grid[row][col];
   }
 
-  paint(row, col, color) {
+  paint(row, col, color, colorMode) {
     if (row < 0 || col < 0 || row >= this.rows || col >= this.cols) return;
     const cell = this.grid[row][col];
     cell.alive = 1;
-    cell.color = color;
+    cell.color = this._pickColor(color, colorMode);
     cell.ghost = 0;
     cell.ghostColor = null;
     cell.ghostFade = 0;
@@ -53,7 +69,6 @@ export class GameOfLife {
         const neighbors = this._neighbors(r, c);
 
         const liveNeighbors = neighbors.filter(n => n && n.alive).length;
-
         let newCell = { ...cell };
 
         // Calculate average color of live neighbors
@@ -76,21 +91,20 @@ export class GameOfLife {
           }
         }
 
-        // Apply Rules
         if (cell.alive) {
-          if (liveNeighbors === this.surviveCount) {
+          if (this.surviveCount.includes(liveNeighbors)) {
             newCell.alive = 1;
           } else {
             newCell.alive = 0;
             newCell.ghost = 1;
             newCell.ghostColor = cell.color;
-            newCell.ghostFade = 0.18;
+            newCell.ghostFade = this.ghostFade;
             newCell.color = null;
           }
         } else {
-          if (liveNeighbors === this.bornAt) {
+          if (this.bornAt.includes(liveNeighbors)) {
             newCell.alive = 1;
-            newCell.color = avgColor || "#ff00cc";
+            newCell.color = this._pickColor(avgColor);
             newCell.ghost = 0;
             newCell.ghostColor = null;
             newCell.ghostFade = 0;
@@ -113,17 +127,53 @@ export class GameOfLife {
   }
 
   _neighbors(row, col) {
-    const dirs = [
-      [-1, -1], [-1, 0], [-1, 1],
-      [0, -1],           [0, 1],
-      [1, -1],  [1, 0],  [1, 1]
-    ];
+    let dirs;
+    switch (this.neighborType) {
+      case "vonneumann":
+        dirs = [
+          [-1, 0], [0, -1], [0, 1], [1, 0]
+        ]; break;
+      case "extended":
+        dirs = [];
+        for (let dr = -2; dr <= 2; dr++) {
+          for (let dc = -2; dc <= 2; dc++) {
+            if (dr === 0 && dc === 0) continue;
+            dirs.push([dr, dc]);
+          }
+        }
+        break;
+      case "moore":
+      default:
+        dirs = [
+          [-1, -1], [-1, 0], [-1, 1],
+          [0, -1],           [0, 1],
+          [1, -1],  [1, 0],  [1, 1]
+        ];
+        break;
+    }
     return dirs.map(([dr, dc]) => this.getCell(row + dr, col + dc));
   }
 
+  _pickColor(avg = null, mode = null) {
+    if (!mode) mode = this.colorMode;
+    switch (mode) {
+      case "random":
+        return this._randomColor();
+      case "hue":
+        this.hue = (this.hue + 31 + Math.random() * 14) % 360;
+        return `hsl(${this.hue},${this.vibrance}%,60%)`;
+      case "blend":
+        return avg || this._randomColor();
+      case "picked":
+      default:
+        if (avg) return avg;
+        return "#ff00cc";
+    }
+  }
+
   _randomColor() {
-    const h = Math.floor(Math.random() * 360);
-    return `hsl(${h},90%,60%)`;
+    const h = Math.floor(Math.random()*360);
+    return `hsl(${h},${this.vibrance}%,60%)`;
   }
   _hexToRgb(hex) {
     hex = hex.replace(/^#/, "");
