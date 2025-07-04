@@ -141,6 +141,12 @@ export class GameOfLife {
     this.grid = this.history.pop();
   }
 
+  rewindTo(index) {
+    while (this.history.length > index) {
+      this.grid = this.history.pop();
+    }
+  }
+
   _neighbors(row, col) {
     let dirs;
     switch (this.neighborType) {

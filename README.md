@@ -73,6 +73,8 @@ Use the direction slider to switch between forward and reverse playback.
 
 Adjust zoom, color, and speed as needed.
 
+Use the frame slider to rewind to earlier frames.
+
 Cells evolve automatically with color blending and ghosting logic.
 
 🧠 Binary Pulse Theory Integration
