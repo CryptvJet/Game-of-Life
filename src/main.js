@@ -15,6 +15,7 @@ const colorPicker = document.getElementById('color-picker');
 const speedSlider = document.getElementById('speed-slider');
 const speedValue = document.getElementById('speed-value');
 const frameValue = document.getElementById('frame-value');
+const frameSlider = document.getElementById('frame-slider');
 const ghostFadeSlider = document.getElementById('ghostfade-slider');
 const ghostFadeValue = document.getElementById('ghostfade-value');
 const colorModeSelect = document.getElementById('colormode-select');
@@ -138,6 +139,8 @@ function animate(now = 0) {
     }
     drawGrid();
     frameValue.innerText = frameCount;
+    frameSlider.max = frameCount;
+    frameSlider.value = frameCount;
     lastFrame = now;
   }
   animationId = requestAnimationFrame(animate);
@@ -165,12 +168,16 @@ clearBtn.onclick = function() {
   drawGrid();
   frameCount = 0;
   frameValue.innerText = frameCount;
+  frameSlider.max = frameCount;
+  frameSlider.value = frameCount;
 };
 resetBtn.onclick = function() {
   game.randomize();
   drawGrid();
   frameCount = 0;
   frameValue.innerText = frameCount;
+  frameSlider.max = frameCount;
+  frameSlider.value = frameCount;
 };
 zoomInBtn.onclick = function() {
   cellSize = Math.min(cellSize + 2, 40);
@@ -209,6 +216,16 @@ speedSlider.oninput = function(e) {
   speedValue.innerText = fps;
   frameInterval = 1000 / fps;
 };
+frameSlider.oninput = function(e) {
+  const target = parseInt(e.target.value);
+  if (target < frameCount) {
+    game.rewindTo(target);
+    frameCount = target;
+    frameValue.innerText = frameCount;
+    frameSlider.max = frameCount;
+    drawGrid();
+  }
+};
 
 // --- Drawing/Painting ---
 let painting = false;
@@ -237,6 +254,8 @@ canvas.addEventListener('touchend', () => painting = false);
 // --- Sliders display ---
 speedValue.innerText = fps;
 frameValue.innerText = frameCount;
+frameSlider.max = frameCount;
+frameSlider.value = frameCount;
 ghostFadeValue.innerText = ghostFadeBase.toFixed(2);
 vibranceValue.innerText = vibrance;
 directionValue.innerText = forward ? 'Forward' : 'Reverse';
