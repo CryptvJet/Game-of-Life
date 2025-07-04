@@ -155,6 +155,17 @@ export const patternsList = {
     [1,1,0],
     [0,1,0]
   ],
+  // Example color pattern - a simple rose
+  "Rose": [
+    [0,0,"#ff0000",0,0],
+    [0,"#ff0000","#ff0000","#ff0000",0],
+    ["#ff0000","#ff0000","#ff0000","#ff0000","#ff0000"],
+    [0,"#ff0000","#ff0000","#ff0000",0],
+    [0,0,"#ff0000",0,0],
+    [0,0,"#00aa00",0,0],
+    [0,"#00aa00","#00aa00","#00aa00",0],
+    ["#00aa00",0,"#00aa00",0,"#00aa00"]
+  ],
   // Guns
   "Gosper Glider Gun": [
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -176,8 +187,10 @@ export function insertPattern(game, baseRow, baseCol, patternName, color, colorM
   const pc = Math.floor(pattern[0].length / 2);
   for (let r = 0; r < pattern.length; r++) {
     for (let c = 0; c < pattern[r].length; c++) {
-      if (pattern[r][c]) {
-        game.paint(baseRow + r - pr, baseCol + c - pc, color, colorMode);
+      const cell = pattern[r][c];
+      if (cell) {
+        const cellColor = typeof cell === 'string' ? cell : color;
+        game.paint(baseRow + r - pr, baseCol + c - pc, cellColor, colorMode);
       }
     }
   }
